@@ -12,19 +12,19 @@ export default class Footer extends Component {
         resources: [
           {
             name: "About",
-            link: "/about",
+            link: "/",
           },
           {
             name: "Careers",
-            link: "/careers",
+            link: "/",
           },
           {
             name: "Contact",
-            link: "/contact",
+            link: "/",
           },
           {
             name: "Admin",
-            link: "/admin",
+            link: "/",
           },
         ],
       },
@@ -33,11 +33,11 @@ export default class Footer extends Component {
         resources: [
           {
             name: "Privacy",
-            link: "/privacy",
+            link: "/",
           },
           {
             name: "Terms",
-            link: "/terms",
+            link: "/",
           },
         ],
       },
@@ -46,11 +46,11 @@ export default class Footer extends Component {
         resources: [
           {
             name: "Locations",
-            link: "/locations",
+            link: "/",
           },
           {
             name: "Culture",
-            link: "/culture",
+            link: "/",
           },
         ],
       },
