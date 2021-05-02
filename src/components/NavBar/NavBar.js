@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import "./NavBar.css";
+import { useTranslation, Trans } from "react-i18next";
+
 // library import
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -11,6 +13,7 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 
 export default function NavBar() {
+  const { t, i18n } = useTranslation();
   const [modalShow, setModalShow] = useState(false);
 
   const [name, setName] = useState("");
@@ -55,8 +58,9 @@ export default function NavBar() {
   };
 
   const localChange = (event) => {
-    console.log(event.target.value);
+    console.log("--------", event.target.id);
     setLocal(event.target.value);
+    i18n.changeLanguage(event.target.value);
   };
 
   return (
@@ -81,8 +85,8 @@ export default function NavBar() {
               >
                 <option>Choose...</option>
                 <option>Turkey</option>
-                <option>United States of America</option>
-                <option>United Kingdom</option>
+                <option>United_States_of_America</option>
+                <option>United_Kingdom</option>
                 <option>Germany</option>
                 <option>Sweden</option>
                 <option>Kenya</option>
@@ -167,8 +171,8 @@ export default function NavBar() {
                 >
                   <option>Choose...</option>
                   <option>Turkey</option>
-                  <option>United States of America</option>
-                  <option>United Kingdom</option>
+                  <option>United_States_of_America</option>
+                  <option>United_Kingdom</option>
                   <option>Germany</option>
                   <option>Sweden</option>
                   <option>Kenya</option>

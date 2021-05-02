@@ -8,6 +8,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // react-cookie import
 import { CookiesProvider } from "react-cookie";
 
+// import i18n (needs to be bundled ;))
+import "./i18n";
+
 ReactDOM.render(
   <React.StrictMode>
     <CookiesProvider>
