@@ -5,11 +5,20 @@ import "./NavBar.css";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Col from "react-bootstrap/Col";
 
-export default function NavBar2() {
+export default function NavBar() {
+  const [modalShow, setModalShow] = useState(false);
+
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
-  const [cookies, setCookie] = useCookies(["user"]);
+  const [local, setLocal] = useState("");
+
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
   const handle = () => {
     setCookie("Name", name, { path: "/" });
@@ -17,12 +26,41 @@ export default function NavBar2() {
   };
 
   const clickLogout = () => {
-    console.log("logout clicked");
+    removeCookie("Name", { path: "/" });
+    removeCookie("Password", { path: "/" });
+    removeCookie("Email", { path: "/" });
+    removeCookie("Local", { path: "/" });
+  };
+
+  const saveForm = () => {
+    setCookie("Name", name, { path: "/" });
+    setCookie("Email", email, { path: "/" });
+    setCookie("Password", pwd, { path: "/" });
+    setCookie("Local", local, { path: "/" });
+    console.log(name, email, pwd, local);
+    setModalShow(false);
+  };
+
+  const handleChange = (event) => {
+    // console.log(event.target.id, event.target.value);
+    if (event.target.id === "name") {
+      setName(event.target.value);
+    } else if (event.target.id === "email") {
+      setEmail(event.target.value);
+    } else if (event.target.id === "pwd") {
+      setPwd(event.target.value);
+    } else if (event.target.id === "local") {
+      setLocal(event.target.value);
+    }
+  };
+
+  const localChange = (event) => {
+    console.log(event.target.value);
+    setLocal(event.target.value);
   };
 
   return (
     <div>
-      {" "}
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <div>
           <img
@@ -35,75 +73,121 @@ export default function NavBar2() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto"></Nav>
           <Nav>
-            <NavDropdown title="Localization" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link href="#deets">More deets</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
-              Dank memes
-            </Nav.Link>
+            <Form.Group controlId="local">
+              <Form.Control
+                as="select"
+                defaultValue="Choose..."
+                onChange={localChange}
+              >
+                <option>Choose...</option>
+                <option>Turkey</option>
+                <option>United States of America</option>
+                <option>United Kingdom</option>
+                <option>Germany</option>
+                <option>Sweden</option>
+                <option>Kenya</option>
+                <option>Brazil</option>
+                <option>Zimbabwe</option>
+              </Form.Control>
+            </Form.Group>
+            {/* <Nav.Link href="#deets">Germany</Nav.Link> */}
+            {/* <Nav.Link href="#memes">Sweden</Nav.Link>
+            <Nav.Link href="#memes">Kenya</Nav.Link>
+            <Nav.Link href="#memes">Brazil</Nav.Link>
+            <Nav.Link href="#memes">Zimbabwe</Nav.Link> */}
             {cookies.Name ? (
               <Nav>
-                <NavDropdown title={cookies.Name} id="collasible-nav-dropdown">
-                  <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.2">
-                    Another action
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">
-                    Something
-                  </NavDropdown.Item>
+                <NavDropdown
+                  title={cookies.Name}
+                  id="collasible-nav-dropdown"
+                  style={{ marginRight: "4rem" }}
+                >
+                  <NavDropdown.Item>Email: {cookies.Email}</NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.4">
-                    Separated link
+                  <NavDropdown.Item onClick={clickLogout}>
+                    Log out
                   </NavDropdown.Item>
                 </NavDropdown>
-                <Nav.Link href="#deets" onClick={this.clickLogout}>
-                  Log out
-                </Nav.Link>
               </Nav>
             ) : (
-              <Nav.Link href="#deets">Log in</Nav.Link>
+              <Nav.Link onClick={() => setModalShow(true)}>Log in</Nav.Link>
             )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      <div className="App">
-        <h1>Name of the user:</h1>
-        <input
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <h1>Password of the user:</h1>
-        <input
-          type="password"
-          placeholder="Password"
-          value={pwd}
-          onChange={(e) => setPwd(e.target.value)}
-        />
-        <div>
-          <button onClick={handle}>Set Cookie</button>{" "}
-        </div>
-        <br />
-        {cookies.Name && (
-          <div>
-            Name: <p>{cookies.Name}</p>
-          </div>
-        )}
-        {cookies.Password && (
-          <div>
-            Password: <p>{cookies.Password}</p>
-          </div>
-        )}
-      </div>
+      <Modal
+        size="lg"
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        aria-labelledby="example-modal-sizes-title-lg"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="example-modal-sizes-title-lg">Login</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Row>
+              <Form.Label htmlFor="name" srOnly>
+                Name
+              </Form.Label>
+              <Form.Control
+                className="mb-2"
+                id="name"
+                placeholder="Jane Doe"
+                onChange={handleChange}
+              />
+            </Form.Row>
+            <Form.Row>
+              <Form.Group as={Col} controlId="email">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email"
+                  onChange={handleChange}
+                />
+              </Form.Group>
+
+              <Form.Group as={Col} controlId="pwd">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Password"
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            </Form.Row>
+
+            <Form.Row>
+              <Form.Group controlId="local">
+                <Form.Label>Local</Form.Label>
+                <Form.Control
+                  as="select"
+                  defaultValue="Choose..."
+                  onChange={handleChange}
+                >
+                  <option>Choose...</option>
+                  <option>Turkey</option>
+                  <option>United States of America</option>
+                  <option>United Kingdom</option>
+                  <option>Germany</option>
+                  <option>Sweden</option>
+                  <option>Kenya</option>
+                  <option>Brazil</option>
+                  <option>Zimbabwe</option>
+                </Form.Control>
+              </Form.Group>
+            </Form.Row>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setModalShow(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={saveForm}>
+            Save changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
